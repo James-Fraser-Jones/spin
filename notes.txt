@@ -1,0 +1,10 @@
+spago commands:
+spago init        #initialize purescript project
+spago install     #add package/library dependencies
+spago repl        #run repl
+spago test        #run tests
+spago build       #compile project/modules/etc..
+spago run         #compile and run Main.purs module
+
+https://github.com/purescript/spago#1-spago-bundle-app
+spago bundle-app --to spin.js   #compile project into single "spin.js" file, for the browser
