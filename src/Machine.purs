@@ -32,6 +32,27 @@ newtype Mealy s i o = Mealy {state :: s, update :: Tuple s i -> Tuple s o}
 
 newtype Moore s i o = Moore {state :: s, update :: s -> i -> s, respond :: s -> o}
 
+newtype Mealy' s i o = Mealy' {state :: s, update :: s -> i -> Tuple s o}
+
+newtype Moore' s i o = Moore' {state :: s, update :: s -> Tuple (i -> s) o}
+
+--equivalent to the state Monad: a -> m b (where m = State s)
+--type Mealy'' s i o = i -> State s o
+
+type Moore'' s i o = s -> Tuple (i -> s) o
+--can we form a monad instance for this? (no probably not)
+--can we form *Arrow* ahem, profunctor instance for this? c:
+
+--state pushed into definition somehow???
+newtype Mealy''' i o = Mealy''' (
+  i -> Tuple (Mealy''' i o) o
+)
+
+newtype Moore''' i o = Moore''' (
+  Tuple (i -> Moore''' i o) o
+)
+--has profucntor instance as long as "o" is a pointed type (has minimum 1 designated inhabitant)
+
 -----------------------------------------------------------------------------------
 
 --proves all Moore Machines are Mealy machines (i.e. injective mapping)
@@ -116,3 +137,6 @@ instance Machine (->) where
 --     mac = 
 
 --instance Machine
+
+--vert :: Moore s a b -> Moore s' b c -> Moore (Tuple s s') a c
+--horz :: Moore s a b -> Moore s' c d -> Moore (Tuple s s') (Tuple a c) (Tuple b d)
